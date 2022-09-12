@@ -30,13 +30,11 @@
         <ScrollView Grid.Row="1">
             <StackLayout Orientation="Vertical" Padding="30,24,30,24" Spacing="10">
                 <Label
-                    AutomationProperties.Name="Start developing now"
                     AutomationProperties.HelpText="Heading"
                     AutomationProperties.IsInAccessibleTree="True"
                     Text="Start developing now"
                     FontSize="Title"/>
                 <Label
-                    AutomationProperties.Name="Make changes to your XAML file and save to see your UI update in the running app with XAML Hot Reload. Give it a try!"
                     AutomationProperties.HelpText="Heading"
                     AutomationProperties.IsInAccessibleTree="True"
                     Text="Make changes to your XAML file and save to see your UI update in the running app with XAML Hot Reload. Give it a try!" FontSize="16" Padding="0,0,0,0"/>
