@@ -3,16 +3,17 @@ using Android.Content;
 using Android.Views.Accessibility;
 using Android.Widget;
 using focusapp.Droid.Renderers;
+using focusapp.Droid.Views;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
 [assembly: ExportRenderer(typeof(Xamarin.Forms.Label), typeof(CustomLabelRenderer))]
 namespace focusapp.Droid.Renderers
 {
-    public class CustomLabelRenderer : ViewRenderer<Label, TextView>
+    public class CustomLabelRenderer : ViewRenderer<Label, CustomTextView>
     {
         Context context;
-        TextView textView;
+        CustomTextView textView;
 
         public CustomLabelRenderer(Context context) : base(context)
         {
@@ -26,7 +27,7 @@ namespace focusapp.Droid.Renderers
             var label = (Label)Element;
             if (label == null)
                 return;
-            textView = new TextView(this.Context);
+            textView = new CustomTextView(Context);
 
             textView.Enabled = true;
             textView.Focusable = true;
@@ -35,11 +36,6 @@ namespace focusapp.Droid.Renderers
 
             // Initial properties Set
             textView.Text = label.Text;
-            textView.SetBackgroundColor(Android.Graphics.Color.White);
-            textView.SetTextColor(Android.Graphics.Color.Black);
-
-            textView.TextSize = (float)label.FontSize;
-            textView.OnInitializeAccessibilityEvent();
 
             SetNativeControl(textView);
 
@@ -49,37 +45,6 @@ namespace focusapp.Droid.Renderers
             }
 
         }
-
-        public override void OnInitializeAccessibilityEvent(AccessibilityEvent e)
-        {
-            base.OnInitializeAccessibilityEvent(e);
-            if (e.EventType == EventTypes.ViewAccessibilityFocused)
-            {
-                this.SetBackgroundColor(Android.Graphics.Color.Green);
-                Console.WriteLine("I am in focus");
-            }
-            else if (e.EventType == EventTypes.ViewAccessibilityFocusCleared)
-            {
-                this.SetBackgroundColor(Android.Graphics.Color.Red);
-                Console.WriteLine("I am in NOT in focus");
-            }
-        }
-
-        protected override Android.Widget.TextView CreateNativeControl()
-        {
-            return new AccessibleLabel(context);
-        }
-    }
-
-    public class AccessibleLabel : Android.Widget.TextView
-    {
-
-        public AccessibleLabel(Context context) : base(context)
-        {
-            Console.WriteLine($"***** AccessibleButton created *****");
-        }
-
-        
     }
 }
 
