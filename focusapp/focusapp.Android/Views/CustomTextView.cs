@@ -39,7 +39,7 @@ namespace focusapp.Droid.Views
             }
             else if (e.EventType == EventTypes.ViewAccessibilityFocusCleared)
             {
-                this.SetBackgroundColor(Android.Graphics.Color.Red);
+                this.SetBackgroundColor(Android.Graphics.Color.Transparent);
                 Console.WriteLine("I am in NOT in focus");
             }
         }
