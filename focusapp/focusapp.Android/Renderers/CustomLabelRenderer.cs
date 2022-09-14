@@ -1,50 +1,70 @@
 ﻿using System;
+using System.ComponentModel;
 using Android.Content;
+using Android.Graphics.Drawables;
+using Android.Util;
 using Android.Views.Accessibility;
 using Android.Widget;
 using focusapp.Droid.Renderers;
-using focusapp.Droid.Views;
+using focusapp.Models;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
+using Button = Xamarin.Forms.Button;
 
-[assembly: ExportRenderer(typeof(Xamarin.Forms.Label), typeof(CustomLabelRenderer))]
+[assembly: ExportRenderer(typeof(CustomLabel), typeof(CustomLabelRenderer))]
 namespace focusapp.Droid.Renderers
 {
-    public class CustomLabelRenderer : ViewRenderer<Label, CustomTextView>
+    public class CustomLabelRenderer : LabelRenderer
     {
-        Context context;
-        CustomTextView textView;
 
         public CustomLabelRenderer(Context context) : base(context)
         {
-            this.context = context;
         }
 
-        protected override void OnElementChanged(ElementChangedEventArgs<Xamarin.Forms.Label> e)
+        //removes border padding for android buttons text
+        protected override void OnElementChanged(ElementChangedEventArgs<Label> e)
         {
             base.OnElementChanged(e);
-
-            var label = (Label)Element;
-            if (label == null)
-                return;
-            textView = new CustomTextView(Context);
-
-            textView.Enabled = true;
-            textView.Focusable = true;
-            textView.LongClickable = true;
-            textView.SetTextIsSelectable(true);
-
-            // Initial properties Set
-            textView.Text = label.Text;
-
-            SetNativeControl(textView);
-
-            if (Control == null)
+            if (Control != null)
             {
-                return;
+                Control.FocusChange += Control_FocusChange;
+                Control.SetPadding(0, 0, 0, 0);
             }
+        }
 
+        private GradientDrawable _gradientBackground;
+
+        private void Control_FocusChange(object sender, FocusChangeEventArgs e)
+        {
+            if (Control.HasFocus)
+            {
+                var view = (CustomLabel)Element;
+                Paint(view);
+            }
+            else
+            {
+                Control.SetBackgroundColor(Android.Graphics.Color.White);
+            }
+        }
+
+        private void Paint(CustomLabel view)
+        {
+            _gradientBackground = new GradientDrawable();
+            _gradientBackground.SetShape(ShapeType.Rectangle);
+            _gradientBackground.SetColor(view.CustomBackgroundColor.ToAndroid());
+            // Thickness of the stroke line  
+            _gradientBackground.SetStroke((int)view.CustomBorderWidth, Android.Graphics.Color.Red);
+            // Radius for the curves  
+            _gradientBackground.SetCornerRadius(
+                DpToPixels(this.Context, Convert.ToSingle(view.CustomBorderRadius)));
+            // set the background of the label  
+            Control.SetBackground(_gradientBackground);
+        }
+
+        public static float DpToPixels(Context context, float valueInDp)
+        {
+            DisplayMetrics metrics = context.Resources.DisplayMetrics;
+            return TypedValue.ApplyDimension(ComplexUnitType.Dip, valueInDp, metrics);
         }
     }
 }
-

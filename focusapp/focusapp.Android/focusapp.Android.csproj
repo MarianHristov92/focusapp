@@ -63,6 +63,8 @@
     <Compile Include="Renderers\CustomLabelRenderer.cs" />
     <Compile Include="Renderers\CustomButtonRenderer.cs" />
     <Compile Include="Views\CustomTextView.cs" />
+    <Compile Include="Renderers\CustomButtonAccessibilityRenderer.cs" />
+    <Compile Include="Renderers\CustomLabelAccessibilityRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />

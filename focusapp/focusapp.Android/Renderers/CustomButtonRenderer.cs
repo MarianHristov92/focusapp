@@ -5,59 +5,42 @@ using Android.Widget;
 using focusapp.Droid.Renderers;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
+using Button = Xamarin.Forms.Button;
 
 [assembly: ExportRenderer(typeof(Xamarin.Forms.Button), typeof(CustomButtonRenderer))]
 namespace focusapp.Droid.Renderers
 {
     public class CustomButtonRenderer : ButtonRenderer
     {
-        Context context;
-
+        
         public CustomButtonRenderer(Context context) : base(context)
         {
-            this.context = context;
         }
 
+        //removes border padding for android buttons text
         protected override void OnElementChanged(ElementChangedEventArgs<Xamarin.Forms.Button> e)
         {
             base.OnElementChanged(e);
-
-            if (Control == null)
+            if (Control != null)
             {
-                return;
+                Control.FocusChange += Control_FocusChange;
+                Control.SetPadding(0, 0, 0, 0);
             }
-
-            Console.WriteLine("created from Android");
-            Control.SetBackgroundColor(Android.Graphics.Color.Red);
         }
 
-        protected override Android.Widget.Button CreateNativeControl()
+        private void Control_FocusChange(object sender, FocusChangeEventArgs e)
         {
-            return new AccessibleButton(context);
-        }
-    }
-
-    public class AccessibleButton : Android.Widget.Button
-    {
-        public AccessibleButton(Context context) : base(context)
-        {
-            Console.WriteLine($"***** AccessibleButton created *****");
-        }
-
-        public override void OnInitializeAccessibilityEvent(AccessibilityEvent e)
-        {
-            base.OnInitializeAccessibilityEvent(e);
-            if (e.EventType == EventTypes.ViewAccessibilityFocused)
+            if (Control.HasFocus)
             {
-                this.SetBackgroundColor(Android.Graphics.Color.Green);
-                Console.WriteLine("I am in focus");
+                var button = (Button)Element;
+                button.BorderWidth = 3;
+                button.BorderColor = Color.Blue;
+                
             }
-            else if (e.EventType == EventTypes.ViewAccessibilityFocusCleared)
+            else
             {
-                this.SetBackgroundColor(Android.Graphics.Color.Red);
-                Console.WriteLine("I am in NOT in focus");
+                Control.SetBackgroundColor(Android.Graphics.Color.White);
             }
         }
     }
 }
-
