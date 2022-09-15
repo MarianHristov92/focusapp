@@ -32,14 +32,13 @@ namespace focusapp.Droid.Renderers
         {
             if (Control.HasFocus)
             {
-                var button = (Button)Element;
-                button.BorderWidth = 3;
-                button.BorderColor = Color.Blue;
-                
+
+                //Control.SetBackgroundColor(Android.Graphics.Color.);
+                //Control.SetBackgroundResource(Resource.Drawable.LabelFrame);
             }
             else
             {
-                Control.SetBackgroundColor(Android.Graphics.Color.White);
+                //Control.SetBackgroundColor(Android.Graphics.Color.White);
             }
         }
     }

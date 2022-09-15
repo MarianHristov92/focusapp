@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="focusapp.Views.AboutPage"
+             xmlns:background="http://xamarin.com/schemas/2014/forms/background"
              xmlns:vm="clr-namespace:focusapp.ViewModels"
              xmlns:customview="clr-namespace:focusapp.Models"
              Title="{Binding Title}">
@@ -31,37 +32,21 @@
         <ScrollView Grid.Row="1">
             <StackLayout Orientation="Vertical" Padding="30,24,30,24" Spacing="10">
 
-
                 <Label
                     AutomationProperties.HelpText="Heading"
                     AutomationProperties.IsInAccessibleTree="True"
                     Text="Start developing now"
                     FontSize="Title"/>
 
-            <customview:CustomLabel 
-                    CustomBorderColor="Transparent"  
-                    CustomBackgroundColor="#24C4FF"  
-                    Text="Log In"
-                    TabIndex="0"
-                    FontSize="Title"
-                    CustomBorderRadius="4"  
-                    CustomBorderWidth="4"  
-                    VerticalOptions="Center"/>
-
                 <Label
                     AutomationProperties.HelpText="Heading"
                     AutomationProperties.IsInAccessibleTree="True"
                     Text="Make changes to your XAML file and save to see your UI update in the running app with XAML Hot Reload. Give it a try!" FontSize="16" Padding="0,0,0,0"/>
-                <Label FontSize="16" Padding="0,24,0,0">
-                    <Label.FormattedText>
-                        <FormattedString>
-                            <FormattedString.Spans>
-                                <Span Text="Learn more at "/>
-                                <Span Text="https://aka.ms/xamarin-quickstart" FontAttributes="Bold"/>
-                            </FormattedString.Spans>
-                        </FormattedString>
-                    </Label.FormattedText>
-                </Label>
+
+                <Label
+                    AutomationProperties.HelpText="Heading"
+                    AutomationProperties.IsInAccessibleTree="True"
+                    Text="Learn more at "/>
 
                 <Button Margin="0,10,0,0" Text="Learn more"
                         Command="{Binding OpenWebCommand}"

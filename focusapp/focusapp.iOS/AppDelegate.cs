@@ -23,6 +23,8 @@ namespace focusapp.iOS
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
             global::Xamarin.Forms.Forms.Init();
+            XamarinBackgroundKit.iOS.BackgroundKit.Init();
+
             LoadApplication(new App());
 
             return base.FinishedLaunching(app, options);
