@@ -1,5 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
+using CoreAnimation;
+using CoreGraphics;
 using focusapp.iOS.Renderers;
 using Foundation;
 using UIKit;
@@ -11,49 +13,48 @@ namespace focusapp.iOS.Renderers
 {
     [Preserve(AllMembers = true)]
 	public class CustomLabelRenderer : LabelRenderer
-	{
-		protected override void OnElementChanged(ElementChangedEventArgs<Label> e)
-		{
+    {
+        private IElementController ElementController => Element as IElementController;
+        private Label label;
 
-			base.OnElementChanged(e);
+        protected override void OnElementChanged(ElementChangedEventArgs<Label> e)
+        {
+            base.OnElementChanged(e);
 
-			if (Control == null)
-			{
-				return;
-			}
-
-			Console.WriteLine("created from IOS");
-		}
-
-		protected override UILabel CreateNativeControl()
-		{
-			return new AccessibleLabel();
-		}
+            label = e.NewElement;
 
 
-	}
+        }
 
-	public class AccessibleLabel : UILabel
-	{
+        private void OnFocused(object sender, EventArgs e)
+        {
+            ElementController.SetValueFromRenderer(Entry.IsFocusedPropertyKey, true);
 
-		public AccessibleLabel() : base()
-		{
-			Console.WriteLine($"***** AccessibleButton created *****");
+            // Need to connect to Sizechanged event because first render time, Entry has no size (-1).
+            if (label != null)
+                label.SizeChanged += (obj, args) =>
+                {
+                    var xamEl = obj as Label;
+                    if (xamEl == null)
+                        return;
 
-		}
+                    // get native control (UITextField)
+                    var entry = this.Control;
 
-		public override void AccessibilityElementDidBecomeFocused()
-		{
-			base.AccessibilityElementDidBecomeFocused();
-			this.BackgroundColor = UIColor.Green;
-			Console.WriteLine("I am in focus");
-		}
+                    // Create borders (bottom only)
+                    CALayer border = new CALayer();
+                    float width = 1.0f;
+                    border.BorderColor = new CoreGraphics.CGColor(0.73f, 0.7451f, 0.7647f);  // gray border color
+                    border.Frame = new CGRect(x: 0, y: xamEl.Height - width, width: xamEl.Width, height: 1.0f);
+                    border.BorderWidth = width;
 
-		public override void AccessibilityElementDidLoseFocus()
-		{
-			base.AccessibilityElementDidLoseFocus();
-			this.BackgroundColor = UIColor.White;
-			Console.WriteLine("I am NOT in focus");
-		}
-	}
+                    entry.Layer.AddSublayer(border);
+
+                    entry.Layer.MasksToBounds = true;
+                    //entry.BorderStyle = UITextBorderStyle.None;
+                    entry.BackgroundColor = new UIColor(1, 1, 1, 1); // white
+                };
+        }
+    }
+
 }
