@@ -12,5 +12,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="Xamarin.Forms.BackgroundKit" />
+    <None Remove="Focus\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Focus\" />
   </ItemGroup>
 </Project>

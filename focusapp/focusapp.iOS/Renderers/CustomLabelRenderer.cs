@@ -23,12 +23,11 @@ namespace focusapp.iOS.Renderers
 
             label = e.NewElement;
 
-
         }
 
         private void OnFocused(object sender, EventArgs e)
         {
-            ElementController.SetValueFromRenderer(Entry.IsFocusedPropertyKey, true);
+            ElementController.SetValueFromRenderer(Label.IsFocusedPropertyKey, true);
 
             // Need to connect to Sizechanged event because first render time, Entry has no size (-1).
             if (label != null)

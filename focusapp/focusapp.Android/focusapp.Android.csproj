@@ -68,6 +68,7 @@
     <Compile Include="Views\CustomTextView.cs" />
     <Compile Include="Renderers\CustomButtonAccessibilityRenderer.cs" />
     <Compile Include="Renderers\CustomLabelAccessibilityRenderer.cs" />
+    <Compile Include="Focus\FocusEffect.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -105,6 +106,7 @@
   <ItemGroup>
     <Folder Include="Renderers\" />
     <Folder Include="Views\" />
+    <Folder Include="Focus\" />
   </ItemGroup>
  <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

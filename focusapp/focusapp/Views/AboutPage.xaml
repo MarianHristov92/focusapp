@@ -5,6 +5,7 @@
              xmlns:background="http://xamarin.com/schemas/2014/forms/background"
              xmlns:vm="clr-namespace:focusapp.ViewModels"
              xmlns:customview="clr-namespace:focusapp.Models"
+             xmlns:effects="clr-namespace:focusapp.Focus"
              Title="{Binding Title}">
     
     <ContentPage.BindingContext>
@@ -36,7 +37,11 @@
                     AutomationProperties.HelpText="Heading"
                     AutomationProperties.IsInAccessibleTree="True"
                     Text="Start developing now"
-                    FontSize="Title"/>
+                    FontSize="Title">
+                    <Label.Effects>
+                        <effects:FocusEffect />
+                    </Label.Effects>
+                </Label>
 
                 <Label
                     AutomationProperties.HelpText="Heading"

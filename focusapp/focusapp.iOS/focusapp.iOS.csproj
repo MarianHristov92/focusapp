@@ -71,6 +71,8 @@
     <Compile Include="Renderers\CustomLabelRenderer.cs" />
     <Compile Include="Renderers\CustomButtonRenderer.cs" />
     <Compile Include="Renderers\CustomLabelAccessibilityRenderer.cs" />
+    <Compile Include="Renderers\CustomButtonAccessibilityRenderer.cs" />
+    <Compile Include="Focus\FocusEffect.cs" />
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json">
@@ -150,5 +152,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Renderers\" />
+    <Folder Include="Focus\" />
   </ItemGroup>
 </Project>
