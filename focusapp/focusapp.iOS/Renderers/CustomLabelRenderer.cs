@@ -12,48 +12,54 @@ using Xamarin.Forms.Platform.iOS;
 namespace focusapp.iOS.Renderers
 {
     [Preserve(AllMembers = true)]
-	public class CustomLabelRenderer : LabelRenderer
+    public class CustomLabelRenderer : LabelRenderer
     {
-        private IElementController ElementController => Element as IElementController;
-        private Label label;
+        UIView view;
+        float width, height;
+        public Func<Brush, CALayer> OriginalBackground { get; private set; }
 
+        UIColor originalColor;
         protected override void OnElementChanged(ElementChangedEventArgs<Label> e)
         {
             base.OnElementChanged(e);
-
-            label = e.NewElement;
-
+            if (Control != null)
+                originalColor = Control.BackgroundColor;
         }
 
-        private void OnFocused(object sender, EventArgs e)
+        public override bool CanBecomeFocused => true;
+
+        public override void DidUpdateFocus(UIFocusUpdateContext context, UIFocusAnimationCoordinator coordinator)
         {
-            ElementController.SetValueFromRenderer(Label.IsFocusedPropertyKey, true);
-
-            // Need to connect to Sizechanged event because first render time, Entry has no size (-1).
-            if (label != null)
-                label.SizeChanged += (obj, args) =>
+            base.DidUpdateFocus(context, coordinator);
+            if (Control.Subviews.Length == 0)
+            {
+                CreateRectange();
+                Control.AddSubview(view);
+            }
+            else
+            {
+                foreach (var sub in Control.Subviews)
                 {
-                    var xamEl = obj as Label;
-                    if (xamEl == null)
-                        return;
+                    sub.RemoveFromSuperview();
+                }
+            } 
+        }
 
-                    // get native control (UITextField)
-                    var entry = this.Control;
-
-                    // Create borders (bottom only)
-                    CALayer border = new CALayer();
-                    float width = 1.0f;
-                    border.BorderColor = new CoreGraphics.CGColor(0.73f, 0.7451f, 0.7647f);  // gray border color
-                    border.Frame = new CGRect(x: 0, y: xamEl.Height - width, width: xamEl.Width, height: 1.0f);
-                    border.BorderWidth = width;
-
-                    entry.Layer.AddSublayer(border);
-
-                    entry.Layer.MasksToBounds = true;
-                    //entry.BorderStyle = UITextBorderStyle.None;
-                    entry.BackgroundColor = new UIColor(1, 1, 1, 1); // white
-                };
+        private void CreateRectange()
+        {
+            height = (float)Control.Frame.Height;
+            width = (float)Control.Frame.Width;
+            view = new UIView();
+            view.BackgroundColor = UIColor.Clear;
+            view.Frame = new CGRect(0, 0, width, height);
+            var maskLayer = new CAShapeLayer();
+            UIBezierPath bezierPath = UIBezierPath.FromRoundedRect(view.Bounds, (UIRectCorner.TopLeft | UIRectCorner.TopRight | UIRectCorner.BottomLeft | UIRectCorner.BottomRight), new CGSize(7, 7));
+            maskLayer.Path = bezierPath.CGPath;
+            maskLayer.Frame = view.Bounds;
+            maskLayer.StrokeColor = UIColor.FromRGB(0, 97, 160).CGColor; //set the borderColor
+            maskLayer.FillColor = UIColor.Clear.CGColor;  //set the background color
+            maskLayer.LineWidth = 2;  //set the border width
+            view.Layer.AddSublayer(maskLayer);
         }
     }
-
 }

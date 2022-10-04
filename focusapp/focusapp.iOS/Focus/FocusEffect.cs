@@ -13,63 +13,43 @@ namespace focusapp.iOS.Focus
 {
     public class FocusEffect : PlatformEffect
     {
-        UIColor backgroundColor;
         UIView view;
-
+        float width,height;
         public Func<Brush, CALayer> OriginalBackground { get; private set; }
 
         protected override void OnAttached()
         {
-            try
-            {
-                OriginalBackground = Container.GetBackgroundLayer;
-                if (Control != null)
-                {
-                    //this.Control.DidUpdateFocus(context:Control, )
-                    CreateRectange();
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Cannot set property on attached control. Error: ", ex.Message);
-            }
         }
 
         private void CreateRectange()
         {
+            height = (float)Control.Frame.Height;
+            width = (float)Control.Frame.Width;
             view = new UIView();
             view.BackgroundColor = UIColor.Clear;
-            view.Frame = new CGRect(30, 100, 36, 36);
+            view.Frame = new CGRect(0,0,width,height);
             var maskLayer = new CAShapeLayer();
-
-            UIBezierPath bezierPath = UIBezierPath.FromRoundedRect(view.Bounds, (UIRectCorner.TopLeft | UIRectCorner.BottomLeft), new CGSize(18.0, 18.0));
-
-
+            UIBezierPath bezierPath = UIBezierPath.FromRoundedRect(view.Bounds, (UIRectCorner.TopLeft | UIRectCorner.BottomLeft), new CGSize(0,0));
             maskLayer.Path = bezierPath.CGPath;
             maskLayer.Frame = view.Bounds;
-
-            maskLayer.StrokeColor = UIColor.Black.CGColor; //set the borderColor
-            maskLayer.FillColor = UIColor.Red.CGColor;   //set the background color
+            maskLayer.StrokeColor = UIColor.Red.CGColor; //set the borderColor
+            maskLayer.FillColor = UIColor.Clear.CGColor;  //set the background color
             maskLayer.LineWidth = 1;  //set the border width
-
             view.Layer.AddSublayer(maskLayer);
-
-            Container.AddSubview(view);
         }
 
         protected override void OnDetached()
         {
         }
 
-
         protected override void OnElementPropertyChanged(PropertyChangedEventArgs args)
         {
-            base.OnElementPropertyChanged(args);
-
+            base.OnElementPropertyChanged(args);   
             try
             {
                 if (args.PropertyName == "IsFocused")
                 {
+                    CreateRectange();
                     Control.AddSubview(view);
                 }
             }
