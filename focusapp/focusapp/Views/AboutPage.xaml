@@ -32,17 +32,12 @@
         </StackLayout>
         <ScrollView Grid.Row="1">
             <StackLayout Orientation="Vertical" Padding="30,24,30,24" Spacing="10">
-                <StackLayout.Effects>
-                        <effects:FocusEffect />
-                    </StackLayout.Effects>
+
                 <Label
                     AutomationProperties.HelpText="Heading"
                     AutomationProperties.IsInAccessibleTree="True"
                     Text="Start developing now"
                     FontSize="Title">
-                    <Label.Effects>
-                        <effects:FocusEffect />
-                    </Label.Effects>
                 </Label>
 
                 <Label
@@ -59,10 +54,6 @@
                         Command="{Binding OpenWebCommand}"
                         BackgroundColor="{StaticResource Primary}"
                         TextColor="White" >
-                                    <Button.Effects>
-                        <effects:FocusEffect />
-                    </Button.Effects>
-
                 </Button>
             </StackLayout>
         </ScrollView>

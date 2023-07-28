@@ -26,36 +26,45 @@ namespace focusapp.iOS.Renderers
 
 		}
 
-		
-		private void OnFocused(object sender, EventArgs e)
-		{
-			ElementController.SetValueFromRenderer(Button.IsFocusedPropertyKey, true);
-			
-			// Need to connect to Sizechanged event because first render time, Entry has no size (-1).
-			if (button != null)
-				button.SizeChanged += (obj, args) =>
-				{
-					var xamEl = obj as Button;
-					if (xamEl == null)
-						return;
+        UIView view;
+        float width, height;
+        public Func<Brush, CALayer> OriginalBackground { get; private set; }
 
-					// get native control (UITextField)
-					var entry = this.Control;
+        public override bool CanBecomeFocused => true;
 
-					// Create borders (bottom only)
-					CALayer border = new CALayer();
-					float width = 1.0f;
-					border.BorderColor = new CoreGraphics.CGColor(0.73f, 0.7451f, 0.7647f);  // gray border color
-					border.Frame = new CGRect(x: 0, y: xamEl.Height - width, width: xamEl.Width, height: 1.0f);
-					border.BorderWidth = width;
+        public override void DidUpdateFocus(UIFocusUpdateContext context, UIFocusAnimationCoordinator coordinator)
+        {
+            base.DidUpdateFocus(context, coordinator);
+            if (Control.Subviews.Length == 0)
+            {
+                CreateRectange();
+                Control.AddSubview(view);
+            }
+            else
+            {
+                foreach (var sub in Control.Subviews)
+                {
+                    sub.RemoveFromSuperview();
+                }
+            }
+        }
 
-					entry.Layer.AddSublayer(border);
-
-					entry.Layer.MasksToBounds = true;
-					//entry.BorderStyle = UITextBorderStyle.None;
-					entry.BackgroundColor = new UIColor(1, 1, 1, 1); // white
-				};
-		}
-	}
+        private void CreateRectange()
+        {
+            height = (float)Control.Frame.Height;
+            width = (float)Control.Frame.Width;
+            view = new UIView();
+            view.BackgroundColor = UIColor.Clear;
+            view.Frame = new CGRect(0, 0, width, height);
+            var maskLayer = new CAShapeLayer();
+            UIBezierPath bezierPath = UIBezierPath.FromRoundedRect(view.Bounds, (UIRectCorner.TopLeft | UIRectCorner.TopRight | UIRectCorner.BottomLeft | UIRectCorner.BottomRight), new CGSize(7, 7));
+            maskLayer.Path = bezierPath.CGPath;
+            maskLayer.Frame = view.Bounds;
+            maskLayer.StrokeColor = UIColor.FromRGB(0, 97, 160).CGColor; //set the borderColor
+            maskLayer.FillColor = UIColor.Clear.CGColor;  //set the background color
+            maskLayer.LineWidth = 2;  //set the border width
+            view.Layer.AddSublayer(maskLayer);
+        }
+    }
 
 }
